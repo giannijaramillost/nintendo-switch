@@ -1,6 +1,6 @@
 import React from 'react'
 
-function LeftControl() {
+function LeftControl({ handleDirection }) {
   return (
     <div className="w-30 h-81 bg-blue-800 border-3 rounded-l-3xl flex flex-col items-center justify-center gap-8 p-4">
       {/* Joystick */}
@@ -11,17 +11,25 @@ function LeftControl() {
       {/* D-Pad (Botones directionales) */}
       <div className="flex flex-col items-center gap-2">
         {/* Arriba */}
-        <button className="w-8 h-8 bg-red-600 rounded-full hover:bg-red-700"></button>
+        <button
+        onClick={() => handleDirection('up')} 
+        className="w-8 h-8 bg-black rounded-full hover:bg-red-700"></button>
         
         {/* Izquierda, Centro, Derecha */}
         <div className="flex gap-2">
-          <button className="w-8 h-8 bg-red-600 rounded-full hover:bg-red-700"></button>
+          <button 
+          onClick={() => handleDirection('left')}
+          className="w-8 h-8 bg-black rounded-full hover:bg-red-700"></button>
           <div className="w-8 h-8"></div>
-          <button className="w-8 h-8 bg-red-600 rounded-full hover:bg-red-700"></button>
+          <button 
+          onClick={() => handleDirection('right')}
+          className="w-8 h-8 bg-black rounded-full hover:bg-red-700"></button>
         </div>
         
         {/* Abajo */}
-        <button className="w-8 h-8 bg-red-600 rounded-full hover:bg-red-700"></button>
+        <button 
+        onClick={() => handleDirection('down')} 
+        className="w-8 h-8 bg-black rounded-full hover:bg-red-700"></button>
       </div>
     </div>
   )
