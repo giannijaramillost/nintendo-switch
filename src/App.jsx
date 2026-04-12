@@ -6,6 +6,7 @@ import Screen from './components/Screen';
 import useFetch from './hooks/useFetch';
 import GameScreen from './components/GameScreen';
 import PokemonDetails from './components/PokemonDetails';
+import VSScreen from './components/VS-Screen';
 
 function App() {
   const url = 'https://pokeapi.co/api/v2/pokemon?limit=100&offset=0';
@@ -81,13 +82,31 @@ function App() {
     getListPokemones();
   }, [data]);
 
+  
+  const [showVSScreen, setShowVSScreen] = useState(false);
+
+  useEffect(() => {
+    if (myPokeSelection.length && computerPokeSelection.length) {
+      setShowVSScreen(true);
+      const timer = setTimeout(() => {
+        setShowVSScreen(false);
+      }, 3000); // Mostrar VS Screen por 3 segundos
+
+      return () => clearTimeout(timer);
+    }
+  }, [myPokeSelection, computerPokeSelection]);
+
 
   return (
     <div className="flex justify-center pt-10 min-h-screen bg-gray-300">
       <LeftControl handleDirection={handleDirection} />
       <div className="flex flex-col items-center max-w-2xl w-full">
         {myPokeSelection.length && computerPokeSelection.length ? (
-          <GameScreen myPokemon={myPokeSelection} computerPokemon={computerPokeSelection} />
+          showVSScreen ? (
+            <VSScreen myPokemon={myPokeSelection} computerPokemon={computerPokeSelection} />
+          ) : (
+            <GameScreen myPokemon={myPokeSelection} computerPokemon={computerPokeSelection} />
+          )
         ) : (
           <>
             <Screen pokemones={pokemones} position={position} />

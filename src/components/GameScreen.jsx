@@ -87,18 +87,36 @@ function GameScreen({ myPokemon, computerPokemon }) {
 
   return (
     <div className="w-[42rem] h-96 border-8 border-black bg-gray-800 relative overflow-hidden">
-      <h1 className="text-white text-4xl font-bold text-center py-4">¡BATALLA POKEMON!</h1>
-      
       {/* HP Player - Superior Izquierda */}
-      <div className="absolute top-20 left-8">
+      <div className="absolute top-2 left-8">
         <p className="text-white font-bold capitalize">{myPokemon[0]?.name}</p>
-        <p className="text-white text-lg font-bold">HP: {Math.max(0, myHP)}/100</p>
+        <div className="flex items-center gap-2">
+          <div className="w-32 h-6 bg-gray-600 border-2 border-white rounded overflow-hidden">
+            <div 
+              className={`h-full transition-all duration-300 ${
+                myHP > 50 ? 'bg-green-500' : myHP > 25 ? 'bg-yellow-500' : 'bg-red-500'
+              }`}
+              style={{ width: `${Math.max(0, myHP)}%` }}
+            />
+          </div>
+          <p className="text-white font-bold text-sm">{Math.max(0, myHP)}/100</p>
+        </div>
       </div>
 
       {/* HP Enemigo - Superior Derecha */}
-      <div className="absolute top-20 right-8">
+      <div className="absolute top-2 right-8">
         <p className="text-white font-bold capitalize text-right">{computerPokemon[0]?.name}</p>
-        <p className="text-white text-lg font-bold text-right">HP: {Math.max(0, pcHP)}/100</p>
+        <div className="flex items-center gap-2 justify-end">
+          <p className="text-white font-bold text-sm">{Math.max(0, pcHP)}/100</p>
+          <div className="w-32 h-6 bg-gray-600 border-2 border-white rounded overflow-hidden">
+            <div 
+              className={`h-full transition-all duration-300 ${
+                pcHP > 50 ? 'bg-green-500' : pcHP > 25 ? 'bg-yellow-500' : 'bg-red-500'
+              }`}
+              style={{ width: `${Math.max(0, pcHP)}%` }}
+            />
+          </div>
+        </div>
       </div>
 
       {/* Pokemon del Usuario - Esquina Inferior Izquierda */}
@@ -125,14 +143,14 @@ function GameScreen({ myPokemon, computerPokemon }) {
         </p>
       </div>
 
-      {/* Botones de Ataque - Inferior Centro */}
-      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-3">
+      {/* Botones de Ataque - Esquina Inferior Derecha */}
+      <div className="absolute bottom-8 right-8 grid grid-cols-2 gap-2">
         {playerMoves.map((move, index) => (
           <button
             key={index}
             onClick={() => handlePlayerAttack(index)}
             disabled={!isPlayerTurn || battleEnded}
-            className={`px-4 py-2 rounded font-bold capitalize text-white transition-all ${
+            className={`px-2 py-1 rounded font-bold capitalize text-white text-xs transition-all ${
               isPlayerTurn && !battleEnded
                 ? 'bg-blue-600 hover:bg-blue-700 cursor-pointer'
                 : 'bg-gray-500 cursor-not-allowed opacity-50'
