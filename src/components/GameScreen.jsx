@@ -17,6 +17,9 @@ function GameScreen({ myPokemon, computerPokemon }) {
   // Obtener los primeros 4 movimientos del jugador
   const playerMoves = myPokemon[0]?.moves?.slice(0, 4) || [];
 
+  // Obtener los primeros 4 movimientos del enemigo
+  const enemyMoves = computerPokemon[0]?.moves?.slice(0, 4) || [];
+
   // Auto-reset HP cuando cambian los Pokémon seleccionados
   useEffect(() => {
     setMyHP(100);
@@ -63,16 +66,21 @@ function GameScreen({ myPokemon, computerPokemon }) {
   useEffect(() => {
     if (!isPlayerTurn && !battleEnded && pcHP > 0) {
       const timer = setTimeout(() => {
-        const enemyDamage = calculateDamage(getRandomInt(30, 100));
+        // Seleccionar un ataque aleatorio del enemigo
+        const randomMoveIndex = getRandomInt(0, enemyMoves.length);
+        const enemyMove = enemyMoves[randomMoveIndex];
+        const enemyPower = enemyMove?.attack || 50;
+        const enemyDamage = calculateDamage(enemyPower);
+        const enemyMoveName = enemyMove?.move?.name?.toUpperCase() || 'ATAQUE';
         
         setMyHP((prev) => {
           const newHP = Math.max(0, prev - enemyDamage);
           
           if (newHP <= 0) {
-            setBattleLog(`¡El enemigo te golpea! ¡Te infligió ${enemyDamage} de daño! ¡Fuiste derrotado!`);
+            setBattleLog(`¡${enemyMoveName}! ¡El enemigo te infligió ${enemyDamage} de daño! ¡Fuiste derrotado!`);
             setBattleEnded(true);
           } else {
-            setBattleLog(`¡El enemigo te golpea! ¡Te infligió ${enemyDamage} de daño!`);
+            setBattleLog(`¡${enemyMoveName}! ¡El enemigo te infligió ${enemyDamage} de daño!`);
           }
           
           return newHP;
@@ -83,7 +91,7 @@ function GameScreen({ myPokemon, computerPokemon }) {
 
       return () => clearTimeout(timer);
     }
-  }, [isPlayerTurn, battleEnded, pcHP]);
+  }, [isPlayerTurn, battleEnded, pcHP, enemyMoves]);
 
   return (
     <div className="w-[42rem] h-96 border-8 border-black bg-gray-800 relative overflow-hidden">
